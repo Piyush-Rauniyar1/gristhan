@@ -39,6 +39,9 @@ dotenv.config({ path: join(__dirname, "../../.env") });
 
 const app = express();
 
+// Trust proxy for express-rate-limit behind Nginx reverse proxy
+app.set("trust proxy", 1);
+
 // CORS Configuration - Allow requests from frontend
 app.use(
   cors({
