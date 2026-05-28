@@ -929,6 +929,7 @@ function HostMessagesSection({ user }) {
       if (data?.success) {
         setMessages([...messages, { ...data.data, content: newMessage.trim() }])
         setNewMessage('')
+      }
     } catch (err) {
       showToast('Failed to send message.', 'error')
     } finally {
