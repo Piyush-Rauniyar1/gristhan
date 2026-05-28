@@ -367,6 +367,7 @@ export function AppDataProvider({ children }) {
           return [...otherBookings, ...apiBookings]
         })
       }
+    } catch (err) { console.error('fetchHostBookings Error:', err) }
   }, [])
 
   const getUserBookings = useCallback((userId) => {
