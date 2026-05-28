@@ -1,1 +1,1 @@
-ALTER TABLE users ADD COLUMN verification_document TEXT;
+ALTER TABLE users ADD COLUMN IF NOT EXISTS verification_document TEXT;

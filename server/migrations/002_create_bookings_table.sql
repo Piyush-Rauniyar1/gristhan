@@ -5,7 +5,7 @@
 -- Drop existing table and recreate (clean slate)
 -- DROP TABLE IF EXISTS bookings CASCADE;
 
-CREATE TABLE bookings (
+CREATE TABLE IF NOT EXISTS bookings (
   id UUID PRIMARY KEY DEFAULT gen_random_uuid(),
   guest_id UUID NOT NULL REFERENCES users(id) ON DELETE CASCADE,
   listing_id UUID NOT NULL REFERENCES listings(id) ON DELETE CASCADE,
