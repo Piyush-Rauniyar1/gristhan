@@ -1,6 +1,12 @@
 import axios from 'axios'
 
-const rawApiUrl = import.meta.env.VITE_API_URL || 'http://localhost:5001'
+// In production (served by Nginx), use same-origin so /v1 requests go through the proxy.
+// In local dev, use VITE_API_URL or fall back to localhost:5001.
+const isLocalDev = window.location.hostname === 'localhost' || window.location.hostname === '127.0.0.1'
+const rawApiUrl = isLocalDev
+  ? (import.meta.env.VITE_API_URL || 'http://localhost:5001')
+  : window.location.origin
+
 const API_BASE_URL = rawApiUrl.endsWith('/v1') 
   ? rawApiUrl.slice(0, -3) 
   : rawApiUrl.endsWith('/v1/') 
