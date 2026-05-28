@@ -852,15 +852,21 @@ function HostMessagesSection({ user }) {
     
     const handleReceiveMessage = (data) => {
       console.log('[SOCKET] Received message:', data)
-      // Decrypt message
+      if (data.conversation_id !== selectedConv?.id) return;
+      
       let decryptedContent = data.content
       try {
         const bytes = CryptoJS.AES.decrypt(data.content, SECRET_KEY)
         const text = bytes.toString(CryptoJS.enc.Utf8)
         decryptedContent = text || data.content
-      } catch (e) {}
+      } catch (e) {
+        console.error('Decryption failed for socket message:', e)
+      }
       
-      setMessages(prev => [...prev, { ...data, content: decryptedContent }])
+      setMessages(prev => {
+        if (prev.some(m => m.id === data.id)) return prev;
+        return [...prev, { ...data, content: decryptedContent }];
+      })
     }
     
     const handleUserTyping = (data) => {
