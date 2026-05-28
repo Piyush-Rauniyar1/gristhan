@@ -132,6 +132,22 @@ export const verifyKhaltiPayment = async (req, res) => {
         });
     }
 
+    // Idempotency: if already paid, return success immediately (prevents re-verification on Back button)
+    const existingBooking = await query(
+      `SELECT payment_status, status FROM bookings WHERE id = $1`,
+      [booking_id],
+    );
+    if (existingBooking.rows.length > 0 && existingBooking.rows[0].payment_status === 'paid') {
+      console.log(`[KHALTI] Booking ${booking_id} already paid — skipping re-verification.`);
+      return res.json({
+        success: true,
+        message: "Khalti payment already verified and booking confirmed.",
+        booking_id,
+        status: existingBooking.rows[0].status,
+        payment_status: "paid",
+      });
+    }
+
     console.log(
       `[KHALTI] Verifying ${pidx ? "PIDX" : "Token"}: ${pidx || token}, Booking: ${booking_id}...`,
     );

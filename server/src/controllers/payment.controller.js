@@ -140,6 +140,21 @@ export const verifyPayment = async (req, res) => {
         });
     }
 
+    // Idempotency: if already paid, return success immediately
+    const existingBooking = await query(
+      `SELECT payment_status, status FROM bookings WHERE id = $1`,
+      [booking_id],
+    );
+    if (existingBooking.rows.length > 0 && existingBooking.rows[0].payment_status === 'paid') {
+      return res.json({
+        success: true,
+        message: "Payment already verified and booking confirmed.",
+        booking_id,
+        status: existingBooking.rows[0].status,
+        payment_status: "paid",
+      });
+    }
+
     let pIntentId = payment_intent_id;
 
     // 1. If we have a session_id, retrieve the session to get the payment_intent
