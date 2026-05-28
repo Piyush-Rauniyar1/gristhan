@@ -929,15 +929,6 @@ function HostMessagesSection({ user }) {
       if (data?.success) {
         setMessages([...messages, { ...data.data, content: newMessage.trim() }])
         setNewMessage('')
-        
-        // Emit to socket
-        socket.emit('send_message', {
-          conversationId: selectedConv.id,
-          content: encryptedText,
-          sender_id: user.id,
-          created_at: data.data.created_at
-        })
-      }
     } catch (err) {
       showToast('Failed to send message.', 'error')
     } finally {
