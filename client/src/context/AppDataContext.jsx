@@ -135,17 +135,14 @@ export function AppDataProvider({ children }) {
         const transformed = listings.map(transformAPIListing)
         setApiListings(transformed)
         setUsingAPI(true)
-        console.log(`[AppData] ✅ Loaded ${transformed.length} listings from API`)
         return transformed
       } else if (listings && listings.length === 0) {
         // API works but no listings in DB yet
         setApiListings([])
         setUsingAPI(true)
-        console.log('[AppData] ✅ API connected, 0 listings in database')
         return []
       }
     } catch (err) {
-      console.warn('[AppData] API listings fetch failed, using mock data:', err.message)
       setUsingAPI(false)
     } finally {
       setListingsLoading(false)
@@ -342,9 +339,7 @@ export function AppDataProvider({ children }) {
   const fetchHostBookings = useCallback(async (hostId) => {
     if (!getToken()) return
     try {
-      console.log('[AppData] 📅 Calling fetchHostBookings...')
       const { data } = await bookingsAPI.getIncoming()
-      console.log('[AppData] 📅 fetchHostBookings response:', data)
       if (data?.success && Array.isArray(data.data)) {
         const apiBookings = data.data.map(b => ({
           id: b.id || b.booking_id,
@@ -365,7 +360,6 @@ export function AppDataProvider({ children }) {
           reviewed: b.reviewed || false,
           _fromAPI: true,
         }))
-        console.log('[AppData] 📅 Mapped host bookings:', apiBookings)
         setBookings(prev => {
           // Keep bookings that belong to OTHER users (guests/other hosts), 
           // but completely replace this host's bookings with the fresh API data
@@ -373,21 +367,15 @@ export function AppDataProvider({ children }) {
           return [...otherBookings, ...apiBookings]
         })
       }
-    } catch (err) { console.error('[AppData] fetchHostBookings Error:', err) }
   }, [])
 
   const getUserBookings = useCallback((userId) => {
-    console.log('[AppData] getUserBookings called with userId:', userId)
-    console.log('[AppData] bookings count:', bookings.length)
     if (bookings.length > 0) {
-      console.log('[AppData] first booking userId:', bookings[0].userId)
     }
     return bookings.filter(b => b.userId === userId)
   }, [bookings])
 
   const getHostBookings = useCallback((hostId) => {
-    console.log('[AppData] getHostBookings called with hostId:', hostId)
-    console.log('[AppData] Current context bookings:', bookings)
     return bookings.filter(b => b.hostId === hostId)
   }, [bookings])
 
@@ -640,9 +628,7 @@ export function AppDataProvider({ children }) {
   const fetchHostListings = useCallback(async () => {
     if (!getToken()) return
     try {
-      console.log('[AppData] 🏠 Calling fetchHostListings...')
       const { data } = await listingsAPI.getMyListings()
-      console.log('[AppData] 🏠 fetchHostListings response:', data)
       if (data?.success && data?.data?.listings) {
         const transformed = data.data.listings.map(l => transformAPIListing(l))
         setHostProperties(transformed)

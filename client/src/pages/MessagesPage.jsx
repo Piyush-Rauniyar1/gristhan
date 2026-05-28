@@ -71,7 +71,6 @@ export default function MessagesPage() {
     setSocket(s)
     
     s.on('connect', () => {
-      console.log('[SOCKET] Connected to server')
     })
     
     return () => s.disconnect()
@@ -114,7 +113,6 @@ export default function MessagesPage() {
     fetchMessages()
     
     const handleReceiveMessage = (data) => {
-      console.log('[SOCKET] Received message:', data)
       if (data.conversation_id !== selectedConv?.id) return;
       
       let decryptedContent = data.content
