@@ -19,12 +19,9 @@ import axios from 'axios'
 import CryptoJS from 'crypto-js'
 import { io } from 'socket.io-client'
 
-const rawApiUrl = import.meta.env.VITE_API_URL || 'http://localhost:5001'
-const API_BASE_URL = rawApiUrl.endsWith('/v1') 
-  ? rawApiUrl.slice(0, -3) 
-  : rawApiUrl.endsWith('/v1/') 
-    ? rawApiUrl.slice(0, -4) 
-    : rawApiUrl
+const isLocalDev = window.location.hostname === 'localhost' || window.location.hostname === '127.0.0.1'
+const rawApiUrl = isLocalDev ? (import.meta.env.VITE_API_URL || 'http://localhost:5001') : window.location.origin
+const API_BASE_URL = rawApiUrl.endsWith('/v1') ? rawApiUrl.slice(0, -3) : rawApiUrl.endsWith('/v1/') ? rawApiUrl.slice(0, -4) : rawApiUrl
 const SECRET_KEY = 'grihastha_default_secret_key'
 
 // ──────────────────────────────────────────────────
