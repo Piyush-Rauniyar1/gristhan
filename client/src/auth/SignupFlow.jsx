@@ -86,7 +86,9 @@ function StepBasicInfo({ data, patch, onNext, role, onRoleChange }) {
     const e = {}
     if (!data.name.trim()) e.name = 'Full name is required.'
     if (!data.email.includes('@')) e.email = 'Enter a valid email.'
-    if (data.password.length < 6) e.password = 'At least 6 characters required.'
+    if (data.password.length < 8) e.password = 'At least 8 characters required.'
+    else if (!/[A-Z]/.test(data.password)) e.password = 'Must contain an uppercase letter.'
+    else if (!/[0-9]/.test(data.password)) e.password = 'Must contain a number.'
     if (!data.phone.trim()) e.phone = 'Phone number is required.'
     setErrors(e)
     return Object.keys(e).length === 0

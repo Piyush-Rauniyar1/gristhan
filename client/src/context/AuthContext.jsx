@@ -166,7 +166,11 @@ export function AuthProvider({ children }) {
       setUser(session)
       return { ok: true, user: session, account: session }
     } catch (error) {
-      const message = error.response?.data?.message || error.message || 'Signup failed.'
+      let message = error.response?.data?.message || error.message || 'Signup failed.'
+      // If there are detailed validation errors, show the first one to the user
+      if (error.response?.data?.errors && error.response.data.errors.length > 0) {
+        message = error.response.data.errors[0].message
+      }
       return { ok: false, error: message }
     } finally {
       setLoading(false)
