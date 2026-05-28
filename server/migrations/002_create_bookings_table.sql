@@ -3,7 +3,7 @@
 -- Date: 2026-03-31
 
 -- Drop existing table and recreate (clean slate)
-DROP TABLE IF EXISTS bookings CASCADE;
+-- DROP TABLE IF EXISTS bookings CASCADE;
 
 CREATE TABLE bookings (
   id UUID PRIMARY KEY DEFAULT gen_random_uuid(),
