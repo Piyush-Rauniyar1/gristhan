@@ -39,7 +39,7 @@ const validateUserSignup = [
     .isEmail()
     .withMessage("A valid email is required.")
     .custom(checkEmailDomain)
-    .normalizeEmail(),
+    .normalizeEmail({ gmail_remove_subaddress: false, gmail_remove_dots: false }),
   body("full_name")
     .trim()
     .notEmpty()
@@ -68,7 +68,7 @@ const validateHostSignup = [
     .isEmail()
     .withMessage("A valid email is required.")
     .custom(checkEmailDomain)
-    .normalizeEmail(),
+    .normalizeEmail({ gmail_remove_subaddress: false, gmail_remove_dots: false }),
   body("full_name")
     .trim()
     .notEmpty()
@@ -97,7 +97,7 @@ const validateLogin = [
     .trim()
     .isEmail()
     .withMessage("A valid email is required.")
-    .normalizeEmail(),
+    .normalizeEmail({ gmail_remove_subaddress: false, gmail_remove_dots: false }),
   body("password").notEmpty().withMessage("Password is required."),
   handleValidationErrors,
 ];
@@ -108,7 +108,7 @@ const validateForgotPassword = [
     .trim()
     .isEmail()
     .withMessage("A valid email is required.")
-    .normalizeEmail(),
+    .normalizeEmail({ gmail_remove_subaddress: false, gmail_remove_dots: false }),
   handleValidationErrors,
 ];
 
