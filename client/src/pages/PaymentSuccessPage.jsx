@@ -23,6 +23,14 @@ export default function PaymentSuccessPage() {
     const verifyPayment = async () => {
       if (hasVerified.current) return
       hasVerified.current = true
+
+      // Prevent re-verification if this booking was already verified in this session
+      const verifiedKey = `payment_verified_${bookingId}`
+      if (bookingId && sessionStorage.getItem(verifiedKey)) {
+        setStatus('success')
+        setMessage('Payment successful! Your booking is now confirmed.')
+        return
+      }
       
       try {
         let res;
@@ -47,6 +55,10 @@ export default function PaymentSuccessPage() {
         if (res.data?.success || res.data?.status === 'CONFIRMED') {
           setStatus('success')
           setMessage('Payment successful! Your booking is now confirmed.')
+          // Mark as verified so Back button won't re-trigger
+          sessionStorage.setItem(verifiedKey, 'true')
+          // Replace history entry so Back button skips this page
+          window.history.replaceState(null, '', '/payment-success?verified=true')
         } else {
           setStatus('error')
           setMessage('Payment verification failed. Please contact support.')
