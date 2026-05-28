@@ -9,19 +9,24 @@ CREATE TABLE bookings (
   id UUID PRIMARY KEY DEFAULT gen_random_uuid(),
   guest_id UUID NOT NULL REFERENCES users(id) ON DELETE CASCADE,
   listing_id UUID NOT NULL REFERENCES listings(id) ON DELETE CASCADE,
+  host_id UUID REFERENCES users(id) ON DELETE SET NULL,
   
   -- Booking Details
   check_in DATE NOT NULL,
   check_out DATE NOT NULL,
   num_guests INTEGER NOT NULL DEFAULT 1,
+  booking_type VARCHAR(50) DEFAULT 'standard',
+  special_requests TEXT,
   
   -- Pricing
   price_per_night DECIMAL(10, 2) NOT NULL,
   nights INTEGER NOT NULL,
   total_price DECIMAL(10, 2) NOT NULL,
+  price_breakdown JSONB,
   
   -- Status
   status VARCHAR(50) DEFAULT 'PENDING' CHECK (status IN ('PENDING', 'CONFIRMED', 'REJECTED', 'CANCELLED', 'COMPLETED')),
+  payment_status VARCHAR(50) DEFAULT 'unpaid',
   
   -- Cancellation Details
   cancellation_reason TEXT,
