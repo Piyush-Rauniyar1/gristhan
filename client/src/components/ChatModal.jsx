@@ -7,7 +7,12 @@ import axios from 'axios' // We'll use axios directly or add to api.js later
 
 // Temporary API helper inside component for simplicity or we can use usersAPI
 // Let's use axios directly to avoid modifying api.js again for now, or just use the endpoints!
-const API_BASE_URL = import.meta.env.VITE_API_URL || 'http://localhost:5001'
+const rawApiUrl = import.meta.env.VITE_API_URL || 'http://localhost:5001'
+const API_BASE_URL = rawApiUrl.endsWith('/v1') 
+  ? rawApiUrl.slice(0, -3) 
+  : rawApiUrl.endsWith('/v1/') 
+    ? rawApiUrl.slice(0, -4) 
+    : rawApiUrl
 
 export default function ChatModal({ isOpen, onClose, conversationId, title = 'Chat', apiPath = 'conversations' }) {
   const { user } = useAuth()

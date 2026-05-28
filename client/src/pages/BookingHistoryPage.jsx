@@ -7,6 +7,7 @@ import {
   FiMessageSquare, FiAlertCircle
 } from 'react-icons/fi'
 import axios from 'axios'
+import api from '../services/api'
 import ChatModal from '../components/ChatModal'
 import { FaStar } from 'react-icons/fa'
 import Navbar from '../components/Navbar'
@@ -233,11 +234,10 @@ export default function BookingHistoryPage() {
 
   const handleMessageHost = async (booking) => {
     try {
-      const token = localStorage.getItem('grihastha_token')
-      const { data } = await axios.post(`${import.meta.env.VITE_API_URL || 'http://localhost:5001'}/v1/conversations`, 
-        { hostId: booking.hostId, listingId: booking.propertyId },
-        { headers: { Authorization: `Bearer ${token}` } }
-      )
+      const { data } = await api.post('/v1/conversations', {
+        hostId: booking.hostId,
+        listingId: booking.propertyId
+      })
       if (data?.success) {
         showToast("Opening chat with host...", "success")
         navigate(`/messages?id=${data.id}`)
@@ -253,11 +253,10 @@ export default function BookingHistoryPage() {
     if (!reason) return
 
     try {
-      const token = localStorage.getItem('grihastha_token')
-      const { data } = await axios.post(`${import.meta.env.VITE_API_URL || 'http://localhost:5001'}/v1/disputes`, 
-        { booking_id: booking.id, reason },
-        { headers: { Authorization: `Bearer ${token}` } }
-      )
+      const { data } = await api.post('/v1/disputes', {
+        booking_id: booking.id,
+        reason
+      })
       if (data?.success) {
         showToast("Dispute raised successfully! Opening chat...", "success")
         navigate(`/messages?id=${data.data.conversation_id}`)
