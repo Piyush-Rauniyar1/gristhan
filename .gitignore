@@ -37,3 +37,4 @@ server/database_azure.sql
 server.zip
 skills/
 .env
+.env.docker

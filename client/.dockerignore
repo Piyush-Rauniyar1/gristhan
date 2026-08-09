@@ -1,0 +1,18 @@
+# Dependencies
+node_modules/
+
+# Build output (rebuilt in Docker)
+dist/
+
+# IDE & OS
+.DS_Store
+.vscode/
+.idea/
+
+# Logs
+*.log
+
+# Misc
+patch_messages.js
+FEATURES.md
+README.md

@@ -1,0 +1,36 @@
+# Dependencies
+node_modules/
+
+# Environment
+.env
+.env.*
+
+# Database dumps
+database_full.sql
+database_azure.sql
+db.sqlite
+
+# Test files
+test-*.js
+check_*.js
+reset_*.js
+delete-*.js
+logs_test.js
+scratch_*.js
+scratch/
+
+# IDE & OS
+.DS_Store
+.vscode/
+.idea/
+
+# Logs
+*.log
+logs/
+error.log
+
+# Misc
+erdiagrams/
+package.json.test
+firebase-admin-key.json
+jsconfig.json

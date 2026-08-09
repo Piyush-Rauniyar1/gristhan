@@ -1,0 +1,58 @@
+# ─── Dependencies ────────────────────────────────────────────────────
+node_modules/
+*/node_modules/
+
+# ─── Environment files ──────────────────────────────────────────────
+.env
+.env.local
+.env.*.local
+
+# ─── Git ─────────────────────────────────────────────────────────────
+.git/
+.github/
+.gitignore
+
+# ─── IDE ─────────────────────────────────────────────────────────────
+.vscode/
+.idea/
+*.swp
+*.swo
+
+# ─── OS ──────────────────────────────────────────────────────────────
+.DS_Store
+Thumbs.db
+
+# ─── Build artifacts ────────────────────────────────────────────────
+client/dist/
+server/dist/
+
+# ─── Logs ────────────────────────────────────────────────────────────
+*.log
+logs/
+
+# ─── Database dumps & SQLite ────────────────────────────────────────
+server/database_full.sql
+server/database_azure.sql
+server/db.sqlite
+sqlschema/
+
+# ─── Test files ──────────────────────────────────────────────────────
+server/test-*.js
+server/check_*.js
+server/reset_*.js
+server/delete-*.js
+server/logs_test.js
+server/scratch_*.js
+server/scratch/
+
+# ─── Firebase credentials (mounted separately) ─────────────────────
+server/firebase-admin-key.json
+
+# ─── Misc ────────────────────────────────────────────────────────────
+server.zip
+skills/
+skills-lock.json
+*.md
+client/patch_messages.js
+server/erdiagrams/
+server/package.json.test
