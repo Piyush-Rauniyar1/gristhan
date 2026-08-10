@@ -1,5 +1,4 @@
 import { createContext, useContext, useState, useEffect, useCallback, useRef } from 'react'
-import { allListings } from '../data/listings'
 import { listingsAPI, bookingsAPI, wishlistsAPI, reviewsAPI, notificationsAPI, adminAPI, hostAPI } from '../services/api'
 import { getToken } from '../services/api'
 
@@ -158,10 +157,8 @@ export function AppDataProvider({ children }) {
     }
   }, [fetchListingsFromAPI])
 
-  // All available properties = API listings (if available) + static fallback + approved host-uploaded
-  const allProperties = usingAPI
-    ? apiListings // The API already returns all approved/published properties from the database
-    : [...allListings, ...hostProperties.filter(p => p.approvalStatus === 'approved' && p.available !== false)]
+  // All available properties = API listings (strictly from database)
+  const allProperties = apiListings
 
   // All host properties including pending/rejected (for admin use)
   const allHostPropertiesRaw = hostProperties

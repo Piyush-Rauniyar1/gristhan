@@ -1,0 +1,18 @@
+name: Keep Render Backend Alive
+
+on:
+  schedule:
+    # Runs every 14 minutes to prevent Render's 15-minute idle sleep
+    - cron: '*/14 * * * *'
+  workflow_dispatch: # Allows manual triggering
+
+jobs:
+  ping:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Ping Backend Health Endpoint
+        uses: fjogeleit/http-request-action@v1
+        with:
+          url: ${{ secrets.RENDER_BACKEND_URL }}/health
+          method: 'GET'
+          timeout: 10000

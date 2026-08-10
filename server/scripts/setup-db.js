@@ -5,6 +5,11 @@ import os from 'os';
 dotenv.config();
 
 async function setupDatabase() {
+  if (process.env.DATABASE_URL) {
+    console.log('✅ DATABASE_URL detected (Managed DB like Supabase). Skipping DB creation check.\n');
+    return;
+  }
+
   // Try connecting as the current OS user first (common on macOS)
   const currentUser = os.userInfo().username;
   const useSsl = process.env.DB_SSL === 'true' || (process.env.DB_HOST && process.env.DB_HOST.includes('database.azure.com'));

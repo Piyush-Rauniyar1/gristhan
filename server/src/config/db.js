@@ -2,26 +2,30 @@ import pg from "pg";
 
 const { Pool } = pg;
 
-// Use .env credentials directly — no OS username guessing
-const poolConfig = {
-  host: process.env.DB_HOST || "localhost",
-  port: parseInt(process.env.DB_PORT || "5432", 10),
-  database: process.env.DB_NAME || "grihastha",
-  user: process.env.DB_USER || "postgres",
-  connectionTimeoutMillis: 5000,
-  idleTimeoutMillis: 30000,
-  max: 10,
-};
+// Use DATABASE_URL if available (e.g., from Supabase/Render), else fallback to individual credentials
+const poolConfig = process.env.DATABASE_URL
+  ? {
+      connectionString: process.env.DATABASE_URL,
+      connectionTimeoutMillis: 5000,
+      idleTimeoutMillis: 30000,
+      max: 10,
+    }
+  : {
+      host: process.env.DB_HOST || "localhost",
+      port: parseInt(process.env.DB_PORT || "5432", 10),
+      database: process.env.DB_NAME || "grihastha",
+      user: process.env.DB_USER || "postgres",
+      password: process.env.DB_PASSWORD,
+      connectionTimeoutMillis: 5000,
+      idleTimeoutMillis: 30000,
+      max: 10,
+    };
 
-// Only add password if provided
-if (process.env.DB_PASSWORD) {
-  poolConfig.password = process.env.DB_PASSWORD;
-}
-
-// Enable SSL if specified in env or automatically for Azure hostnames
+// Enable SSL if specified in env or automatically for Azure/Supabase hostnames
 if (
   process.env.DB_SSL === "true" ||
-  (process.env.DB_HOST && process.env.DB_HOST.includes("database.azure.com"))
+  (process.env.DB_HOST && process.env.DB_HOST.includes("database.azure.com")) ||
+  (process.env.DATABASE_URL && process.env.DATABASE_URL.includes("supabase.com"))
 ) {
   poolConfig.ssl = {
     rejectUnauthorized: false, // Prevents certificate verification errors unless a specific CA is set up

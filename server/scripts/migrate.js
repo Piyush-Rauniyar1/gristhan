@@ -14,9 +14,19 @@ const __filename = fileURLToPath(import.meta.url);
 const __dirname = path.dirname(__filename);
 
 async function createPool() {
-  const currentUser = os.userInfo().username;
-  const useSsl = process.env.DB_SSL === 'true' || (process.env.DB_HOST && process.env.DB_HOST.includes('database.azure.com'));
+  const useSsl = process.env.DB_SSL === 'true' || 
+                 (process.env.DB_HOST && process.env.DB_HOST.includes('database.azure.com')) ||
+                 (process.env.DATABASE_URL && process.env.DATABASE_URL.includes('supabase.com'));
   const sslConfig = useSsl ? { rejectUnauthorized: false } : undefined;
+
+  if (process.env.DATABASE_URL) {
+    return new Pool({
+      connectionString: process.env.DATABASE_URL,
+      ssl: sslConfig,
+    });
+  }
+
+  const currentUser = os.userInfo().username;
   
   try {
     // Try with OS username first (common on macOS)
