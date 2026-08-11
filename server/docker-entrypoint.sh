@@ -6,13 +6,17 @@ echo "⏳ Waiting for PostgreSQL to be ready..."
 # Wait for PostgreSQL to accept connections
 until node -e "
   import('pg').then(({ default: pg }) => {
-    const pool = new pg.Pool({
+    const config = process.env.DATABASE_URL ? { connectionString: process.env.DATABASE_URL } : {
       host: process.env.DB_HOST,
       port: parseInt(process.env.DB_PORT || '5432'),
       database: 'postgres',
       user: process.env.DB_USER,
       password: process.env.DB_PASSWORD,
-    });
+    };
+    if (process.env.DB_SSL === 'true' || (process.env.DATABASE_URL && process.env.DATABASE_URL.includes('supabase.com'))) {
+      config.ssl = { rejectUnauthorized: false };
+    }
+    const pool = new pg.Pool(config);
     pool.query('SELECT 1')
       .then(() => { pool.end(); process.exit(0); })
       .catch(() => { pool.end(); process.exit(1); });
