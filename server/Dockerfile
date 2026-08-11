@@ -1,5 +1,5 @@
 # ─── Stage 1: Install dependencies ─────────────────────────────────
-FROM node:22-alpine AS deps
+FROM node:22-bookworm-slim AS deps
 
 WORKDIR /app
 
@@ -10,12 +10,12 @@ COPY package.json package-lock.json ./
 RUN npm ci --omit=dev
 
 # ─── Stage 2: Production image ─────────────────────────────────────
-FROM node:22-alpine AS production
+FROM node:22-bookworm-slim AS production
 
 WORKDIR /app
 
 # Add curl for health checks
-RUN apk add --no-cache curl
+RUN apt-get update && apt-get install -y curl && rm -rf /var/lib/apt/lists/*
 
 # Copy node_modules from deps stage
 COPY --from=deps /app/node_modules ./node_modules
