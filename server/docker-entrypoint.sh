@@ -19,9 +19,9 @@ until node -e "
     const pool = new pg.Pool(config);
     pool.query('SELECT 1')
       .then(() => { pool.end(); process.exit(0); })
-      .catch(() => { pool.end(); process.exit(1); });
+      .catch((e) => { console.error('DB Check Error:', e.message); pool.end(); process.exit(1); });
   });
-" 2>/dev/null; do
+"; do
   echo "   PostgreSQL not ready yet, retrying in 2s..."
   sleep 2
 done
