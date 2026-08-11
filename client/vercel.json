@@ -1,6 +1,14 @@
 {
   "rewrites": [
     {
+      "source": "/v1/:path*",
+      "destination": "https://gristhan-3.onrender.com/v1/:path*"
+    },
+    {
+      "source": "/socket.io/:path*",
+      "destination": "https://gristhan-3.onrender.com/socket.io/:path*"
+    },
+    {
       "source": "/(.*)",
       "destination": "/index.html"
     }
