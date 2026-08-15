@@ -68,8 +68,8 @@ export const initiatePayment = async (req, res) => {
       Math.round((totalNPR / NPR_TO_USD_RATE) * 100),
     );
 
-    let baseUrl = process.env.CLIENT_URL || (process.env.NODE_ENV === "production" ? "https://gristhan.vercel.app" : "http://localhost:5173");
-    if (process.env.NODE_ENV === "production" && baseUrl.includes("localhost")) {
+    let baseUrl = process.env.CLIENT_URL || "http://localhost:5173";
+    if (baseUrl === "http://localhost" || baseUrl === "http://localhost/") {
       baseUrl = "https://gristhan.vercel.app";
     }
     baseUrl = baseUrl.replace(/\/+$/, "");

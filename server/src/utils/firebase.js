@@ -3,11 +3,17 @@ import admin from "firebase-admin";
 // In a real scenario, you'd load credentials from a JSON file or env var JSON string
 // e.g. admin.initializeApp({ credential: admin.credential.cert(serviceAccount) });
 try {
-  if (process.env.FIREBASE_PROJECT_ID) {
+  if (process.env.FIREBASE_SERVICE_ACCOUNT) {
+    const serviceAccount = JSON.parse(process.env.FIREBASE_SERVICE_ACCOUNT);
+    admin.initializeApp({
+      credential: admin.credential.cert(serviceAccount)
+    });
+    console.log("Firebase Admin initialized via FIREBASE_SERVICE_ACCOUNT");
+  } else if (process.env.FIREBASE_PROJECT_ID) {
     admin.initializeApp({
       credential: admin.credential.applicationDefault(),
     });
-    console.log("Firebase Admin initialized");
+    console.log("Firebase Admin initialized via applicationDefault");
   } else {
     console.warn("Firebase config missing. Push notifications will be mocked.");
   }
