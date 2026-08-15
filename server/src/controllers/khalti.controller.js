@@ -64,7 +64,11 @@ export const initiateKhaltiPayment = async (req, res) => {
       "https://a.khalti.com/api/v2/epayment/initiate/";
     
     // Ensure no trailing slash in CLIENT_URL to prevent double slashes
-    const baseUrl = (process.env.CLIENT_URL || "http://localhost:5173").replace(/\/+$/, "");
+    let baseUrl = process.env.CLIENT_URL || (process.env.NODE_ENV === "production" ? "https://gristhan.vercel.app" : "http://localhost:5173");
+    if (process.env.NODE_ENV === "production" && baseUrl.includes("localhost")) {
+      baseUrl = "https://gristhan.vercel.app";
+    }
+    baseUrl = baseUrl.replace(/\/+$/, "");
     const returnUrl = `${baseUrl}/payment-success?booking_id=${booking.id}`;
 
     const khaltiPayload = {

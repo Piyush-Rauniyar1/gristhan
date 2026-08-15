@@ -68,6 +68,12 @@ export const initiatePayment = async (req, res) => {
       Math.round((totalNPR / NPR_TO_USD_RATE) * 100),
     );
 
+    let baseUrl = process.env.CLIENT_URL || (process.env.NODE_ENV === "production" ? "https://gristhan.vercel.app" : "http://localhost:5173");
+    if (process.env.NODE_ENV === "production" && baseUrl.includes("localhost")) {
+      baseUrl = "https://gristhan.vercel.app";
+    }
+    baseUrl = baseUrl.replace(/\/+$/, "");
+
     // 3. Create Checkout Session
     const session = await stripe.checkout.sessions.create({
       payment_method_types: ["card"],
@@ -86,8 +92,8 @@ export const initiatePayment = async (req, res) => {
         },
       ],
       mode: "payment",
-      success_url: `${(process.env.CLIENT_URL || "http://localhost:5173").replace(/\/+$/, "")}/payment-success?gateway=stripe&session_id={CHECKOUT_SESSION_ID}&booking_id=${booking.id}`,
-      cancel_url: `${(process.env.CLIENT_URL || "http://localhost:5173").replace(/\/+$/, "")}/property/${booking.listing_id}?payment_cancelled=true`,
+      success_url: `${baseUrl}/payment-success?gateway=stripe&session_id={CHECKOUT_SESSION_ID}&booking_id=${booking.id}`,
+      cancel_url: `${baseUrl}/property/${booking.listing_id}?payment_cancelled=true`,
       metadata: {
         booking_id: booking.id,
         user_id: userId,

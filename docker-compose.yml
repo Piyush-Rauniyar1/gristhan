@@ -10,7 +10,7 @@ services:
     environment:
       - NODE_ENV=production
     ports:
-      - "5001:5001"
+      - "5002:5002"
     volumes:
       # Mount firebase key if it exists on host (optional)
       - ./server/firebase-admin-key.json:/app/firebase-admin-key.json:ro

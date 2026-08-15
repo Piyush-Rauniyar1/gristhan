@@ -56,6 +56,11 @@ try {
     console.log(`   Environment: ${process.env.NODE_ENV || "development"}`);
     console.log(`   Health check: http://localhost:${PORT}/health`);
     console.log(`   API docs:     http://localhost:${PORT}/api-docs`);
+    
+    // Ponytail self-ping: keeps Render awake without UptimeRobot
+    if (process.env.RENDER_EXTERNAL_URL) {
+      setInterval(() => fetch(`${process.env.RENDER_EXTERNAL_URL}/health`).catch(() => {}), 14 * 60 * 1000);
+    }
   });
 
   // Handle graceful shutdown
